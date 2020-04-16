@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.7.0-alpha">
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<database name="new_database">
+</database>
+
+<table name="producto">
+	<schema name="public"/>
+	<position x="34" y="27"/>
+	<column name="referencia" not-null="true">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[Referencia del producto]]></comment>
+	</column>
+	<column name="descripcion" not-null="true">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[Descripcion del producto]]></comment>
+	</column>
+	<column name="precio" not-null="true" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Precio del producto]]></comment>
+	</column>
+	<column name="ultimo_costo" not-null="true" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Ultimo costo de compra]]></comment>
+	</column>
+	<column name="cantidad" not-null="true" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Existencia del producto]]></comment>
+	</column>
+	<column name="impuesto" not-null="true" default-value="0">
+		<type name="numeric" length="9" precision="4"/>
+		<comment><![CDATA[% impuesto o ITBIS del producto]]></comment>
+	</column>
+	<column name="servicio">
+		<type name="boolean"/>
+		<comment><![CDATA[Indica si es un producto o un servicio. Si es un servicio no tiene cantidades existencia]]></comment>
+	</column>
+	<constraint name="pk_producto" type="pk-constr" factor="10" table="public.producto">
+		<columns names="referencia" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="cliente">
+	<schema name="public"/>
+	<comment><![CDATA[Clientes]]></comment>
+	<position x="505" y="31"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID del cliente]]></comment>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="20"/>
+		<comment><![CDATA[Nombre del cliente]]></comment>
+	</column>
+	<column name="apellido" not-null="true">
+		<type name="character varying" length="20"/>
+		<comment><![CDATA[Apellido del cliente]]></comment>
+	</column>
+	<column name="direcccion" not-null="true">
+		<type name="character varying" length="40"/>
+		<comment><![CDATA[Direccion del cliente]]></comment>
+	</column>
+	<column name="provincia">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[Provincia del cliente]]></comment>
+	</column>
+	<column name="email">
+		<type name="varchar" length="100"/>
+		<comment><![CDATA[Email del clinete]]></comment>
+	</column>
+	<column name="telefono">
+		<type name="varchar" length="12"/>
+		<comment><![CDATA[telefono cliente]]></comment>
+	</column>
+	<column name="celular">
+		<type name="varchar" length="12"/>
+		<comment><![CDATA[Celuar cliente]]></comment>
+	</column>
+	<column name="balance" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Balance cliente]]></comment>
+	</column>
+	<constraint name="pk_cliente" type="pk-constr" factor="10" table="public.cliente">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="categoria">
+	<schema name="public"/>
+	<comment><![CDATA[Categoria de los productos]]></comment>
+	<position x="49" y="403"/>
+	<column name="id" not-null="true">
+		<type name="serial"/>
+		<comment><![CDATA[ID de la categoria]]></comment>
+	</column>
+	<column name="descripcion" not-null="true">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[Descripcion de las categorias]]></comment>
+	</column>
+	<constraint name="pk_categoria" type="pk-constr" factor="10" table="public.categoria">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="factura">
+	<schema name="public"/>
+	<comment><![CDATA[facturas del sistema]]></comment>
+	<position x="598.714" y="570"/>
+	<column name="id" not-null="true">
+		<type name="serial"/>
+		<comment><![CDATA[ID para mantener esto como clave primaria]]></comment>
+	</column>
+	<column name="tipo_factura" not-null="true">
+		<type name="varchar" length="3"/>
+		<comment><![CDATA[Tipo de la factura ]]></comment>
+	</column>
+	<column name="no_factura" not-null="true" default-value="0">
+		<type name="integer"/>
+		<comment><![CDATA[No Factura]]></comment>
+	</column>
+	<column name="fecha" not-null="true" default-value="now()">
+		<type name="timestamp"/>
+		<comment><![CDATA[fecha de la factura]]></comment>
+	</column>
+	<constraint name="pk_factura" type="pk-constr" factor="10" table="public.factura">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="factura_detalle">
+	<schema name="public"/>
+	<comment><![CDATA[Detalle de los productos que se hacen en una factura]]></comment>
+	<position x="576" y="874"/>
+	<column name="id" not-null="true">
+		<type name="serial"/>
+		<comment><![CDATA[ID de la tabla para PK]]></comment>
+	</column>
+	<column name="precio_venta" not-null="true" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Precio de venta del producto]]></comment>
+	</column>
+	<column name="costo" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Costo]]></comment>
+	</column>
+	<column name="cantidad" not-null="true">
+		<type name="numeric" length="9" precision="2"/>
+		<comment><![CDATA[Cantidad del producto]]></comment>
+	</column>
+	<column name="itbis" not-null="true" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[ITBIS del producto]]></comment>
+	</column>
+	<constraint name="pk_factura_detalle" type="pk-constr" factor="10" table="public.factura_detalle">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="departamento">
+	<schema name="public"/>
+	<comment><![CDATA[Tabla de los departamentos de la empresa]]></comment>
+	<position x="959" y="25"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID pk]]></comment>
+	</column>
+	<column name="descripcion">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[Descrpcion]]></comment>
+	</column>
+	<constraint name="pk_depto" type="pk-constr" factor="10" table="public.departamento">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="suplidores">
+	<schema name="public"/>
+	<comment><![CDATA[Suplidores que suplen los productos]]></comment>
+	<position x="1228.43" y="142.571"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID del suplidor]]></comment>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[Nombre Suplidor]]></comment>
+	</column>
+	<column name="contacto" not-null="true">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[COntacto de la cuenta]]></comment>
+	</column>
+	<column name="direccion" not-null="true">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[Direcccion suplidor]]></comment>
+	</column>
+	<column name="telefono">
+		<type name="varchar" length="12"/>
+		<comment><![CDATA[Telefono suplior]]></comment>
+	</column>
+	<column name="telefono_contacto">
+		<type name="varchar" length="12"/>
+		<comment><![CDATA[Celular del contacto con el suplidro]]></comment>
+	</column>
+	<column name="email">
+		<type name="varchar" length="100"/>
+		<comment><![CDATA[Email del suplidor]]></comment>
+	</column>
+	<column name="web">
+		<type name="varchar" length="100"/>
+		<comment><![CDATA[WebSite del suplidor]]></comment>
+	</column>
+	<column name="email_contacto">
+		<type name="varchar" length="100"/>
+		<comment><![CDATA[Email de la persona de contacto]]></comment>
+	</column>
+	<constraint name="pk_suplidor" type="pk-constr" factor="10" table="public.suplidores">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="entrada_inventario">
+	<schema name="public"/>
+	<comment><![CDATA[Entradas de los productos de inventario]]></comment>
+	<position x="127" y="494"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[No de la entrada ]]></comment>
+	</column>
+	<column name="fecha_entrada" not-null="true" default-value="now()">
+		<type name="timestamp"/>
+		<comment><![CDATA[fecha de la entrada al sistema]]></comment>
+	</column>
+	<column name="comentario">
+		<type name="text"/>
+		<comment><![CDATA[comentario de la entrada]]></comment>
+	</column>
+	<constraint name="pk_entrada" type="pk-constr" factor="10" table="public.entrada_inventario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="entrada_inventario_detalle">
+	<schema name="public"/>
+	<comment><![CDATA[Productos que se le dieron entrdada]]></comment>
+	<position x="87" y="882"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID de cada producto]]></comment>
+	</column>
+	<column name="costo">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Costo del producto]]></comment>
+	</column>
+	<column name="cantidad">
+		<type name="numeric" length="9" precision="2"/>
+		<comment><![CDATA[Cantidad de poductos entrada al inventario]]></comment>
+	</column>
+	<constraint name="pk_entrada_inv_detalle" type="pk-constr" factor="10" table="public.entrada_inventario_detalle">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="salida_inventario">
+	<schema name="public"/>
+	<comment><![CDATA[Salida de los productos de inventario]]></comment>
+	<position x="1240.71" y="444.286"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[No de la entrada ]]></comment>
+	</column>
+	<column name="fecha_entrada" not-null="true" default-value="now()">
+		<type name="timestamp"/>
+		<comment><![CDATA[fecha de la entrada al sistema]]></comment>
+	</column>
+	<column name="comentario">
+		<type name="text"/>
+		<comment><![CDATA[comentario de la entrada]]></comment>
+	</column>
+	<constraint name="pk_entrada_1" type="pk-constr" factor="10" table="public.salida_inventario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="salida_inventario_detalle">
+	<schema name="public"/>
+	<comment><![CDATA[Productos que se le dieron salida]]></comment>
+	<position x="1121" y="762"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID de cada producto]]></comment>
+	</column>
+	<column name="costo">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Costo del producto]]></comment>
+	</column>
+	<column name="cantidad">
+		<type name="numeric" length="9" precision="2"/>
+		<comment><![CDATA[Cantidad de poductos entrada al inventario]]></comment>
+	</column>
+	<constraint name="pk_salida" type="pk-constr" factor="10" table="public.salida_inventario_detalle">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="usuario">
+	<schema name="public"/>
+	<comment><![CDATA[Usaurios que usan el sistema ]]></comment>
+	<position x="661" y="1029"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID user]]></comment>
+	</column>
+	<column name="username">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[nombre usaurio]]></comment>
+	</column>
+	<column name="password">
+		<type name="varchar" length="32"/>
+		<comment><![CDATA[Clave para entrar al sistema]]></comment>
+	</column>
+	<column name="cedula">
+		<type name="integer"/>
+	</column>
+	<column name="nombre">
+		<type name="varchar" length="40"/>
+		<comment><![CDATA[Nombre correcto del usaurio]]></comment>
+	</column>
+	<column name="apellido" not-null="true">
+		<type name="varchar" length="40"/>
+	</column>
+	<column name="sexo">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="email">
+		<type name="varchar" length="100"/>
+		<comment><![CDATA[Email del usaurio]]></comment>
+	</column>
+	<column name="celular">
+		<type name="integer"/>
+	</column>
+	<column name="activo">
+		<type name="boolean"/>
+		<comment><![CDATA[Indica si esta o no activo en la empresa para poder entrar al sistema]]></comment>
+	</column>
+	<column name="foto" not-null="true">
+		<type name="bytea"/>
+		<comment><![CDATA[foto del usuario ]]></comment>
+	</column>
+	<column name="fecha_inclu">
+		<type name="date"/>
+	</column>
+	<constraint name="pk_user" type="pk-constr" factor="10" table="public.usuario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="recibos">
+	<schema name="public"/>
+	<comment><![CDATA[Recibios de las facturas a credito que se hacen en el sistema]]></comment>
+	<position x="866" y="1253"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID de recibo]]></comment>
+	</column>
+	<column name="no_recibo" default-value="0">
+		<type name="integer"/>
+		<comment><![CDATA[Numero del recibo]]></comment>
+	</column>
+	<column name="fecha">
+		<type name="timestamp"/>
+		<comment><![CDATA[fecha del recibo]]></comment>
+	</column>
+	<column name="monto" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Monto del recibo]]></comment>
+	</column>
+	<column name="comentario">
+		<type name="text"/>
+		<comment><![CDATA[cometario al recibo]]></comment>
+	</column>
+	<constraint name="pk_recibo" type="pk-constr" factor="10" table="public.recibos">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="recibos_facturas">
+	<schema name="public"/>
+	<comment><![CDATA[DEtalle de las facturas que pago o aplico un recibo]]></comment>
+	<position x="791" y="1580"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID de la tabla solo para PK]]></comment>
+	</column>
+	<column name="monto_aplicado" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Monto que se aplico]]></comment>
+	</column>
+	<constraint name="pk_reci_factura" type="pk-constr" factor="10" table="public.recibos_facturas">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="permisos">
+	<schema name="public"/>
+	<comment><![CDATA[Permisos de las opciones que tiene un usaurio  en el sistema]]></comment>
+	<position x="1299" y="961"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID pK]]></comment>
+	</column>
+	<column name="tiene_permiso">
+		<type name="boolean"/>
+		<comment><![CDATA[Indica si tiene o no permiso en la opcion]]></comment>
+	</column>
+	<constraint name="pk_permiso" type="pk-constr" factor="10" table="public.permisos">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="opciones_sistema">
+	<schema name="public"/>
+	<comment><![CDATA[Almacena todas las opciones del sistema para manejar sus permisos. Estas opciones son las que se muestran en el menu]]></comment>
+	<position x="1317" y="1337"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[Id de la opcion]]></comment>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="varchar" length="20"/>
+		<comment><![CDATA[Nombre de la opcion que saldra en el menu]]></comment>
+	</column>
+	<column name="descripcion">
+		<type name="text"/>
+		<comment><![CDATA[Indica para que es esta opcion y que hace]]></comment>
+	</column>
+	<column name="menu" default-value="0">
+		<type name="smallint"/>
+		<comment><![CDATA[Indca en cual menu se encuentra esta opcion]]></comment>
+	</column>
+	<column name="opcion">
+		<type name="smallint"/>
+		<comment><![CDATA[Indica cual opcion es en el menu donde se encuentra]]></comment>
+	</column>
+	<constraint name="pk_opciones" type="pk-constr" factor="10" table="public.opciones_sistema">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="devolucion">
+	<schema name="public"/>
+	<comment><![CDATA[Devoluciones hechas a las facturas]]></comment>
+	<position x="21" y="1114"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[PK]]></comment>
+	</column>
+	<column name="fecha">
+		<type name="timestamp"/>
+		<comment><![CDATA[Fecha de la devolucion]]></comment>
+	</column>
+	<constraint name="pk_devolucoin" type="pk-constr" factor="10" table="public.devolucion">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="devolucion_detalle">
+	<schema name="public"/>
+	<comment><![CDATA[Productos que fueron devueltos]]></comment>
+	<position x="10" y="1565"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[ID para el detalle y hacer el PK]]></comment>
+	</column>
+	<column name="cantidad_devuelta" default-value="0">
+		<type name="numeric" length="9" precision="2"/>
+		<comment><![CDATA[que cantidad de un producto fue devuelta]]></comment>
+	</column>
+	<column name="precio" default-value="0">
+		<type name="numeric" length="15" precision="2"/>
+		<comment><![CDATA[Precio del producto devuelto]]></comment>
+	</column>
+</table>
+
+<relationship name="categoria_has_many_producto" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="7" constr-indexes="1"
+	 src-table="public.categoria"
+	 dst-table="public.producto"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="cliente_has_many_factura" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="1"
+	 src-table="public.cliente"
+	 dst-table="public.factura"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="departamento_has_many_factura" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="5" constr-indexes="2"
+	 src-table="public.departamento"
+	 dst-table="public.factura"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="usuario_has_many_factura" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="6" constr-indexes="3"
+	 src-table="public.usuario"
+	 dst-table="public.factura"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="producto_has_many_factura_detalle" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="5" constr-indexes="1"
+	 src-table="public.producto"
+	 dst-table="public.factura_detalle"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="SET DEFAULT"/>
+
+<relationship name="suplidores_has_many_entrada_inventario" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="1"
+	 src-table="public.suplidores"
+	 dst-table="public.entrada_inventario"
+	 src-required="false" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="entrada_inventario_has_many_entrada_inventario_detalle" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="0"
+	 src-table="public.entrada_inventario"
+	 dst-table="public.entrada_inventario_detalle"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="producto_has_many_entrada_inventario_detalle" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="2"
+	 src-table="public.producto"
+	 dst-table="public.entrada_inventario_detalle"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="factura_has_many_factura_detalle" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="6" constr-indexes="2"
+	 src-table="public.factura"
+	 dst-table="public.factura_detalle"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="salida_inventario_has_many_salida_inventario_detalle" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="1"
+	 src-table="public.salida_inventario"
+	 dst-table="public.salida_inventario_detalle"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="recibos_has_many_recibos_facturas" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="0"
+	 src-table="public.recibos"
+	 dst-table="public.recibos_facturas"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="factura_has_many_recibos_facturas" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="1"
+	 src-table="public.factura"
+	 dst-table="public.recibos_facturas"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="devolucion_has_many_devolucion_detalle" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="0"
+	 src-table="public.devolucion"
+	 dst-table="public.devolucion_detalle"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="producto_has_many_devolucion_detalle" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="1"
+	 src-table="public.producto"
+	 dst-table="public.devolucion_detalle"
+	 src-required="false" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="usuario_has_many_devolucion" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="1"
+	 src-table="public.usuario"
+	 dst-table="public.devolucion"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="factura_has_many_devolucion" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="2"
+	 src-table="public.factura"
+	 dst-table="public.devolucion"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="usuario_has_many_permisos" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="1"
+	 src-table="public.usuario"
+	 dst-table="public.permisos"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT">
+	<label ref-type="src-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="opciones_sistema_has_many_permisos" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="2"
+	 src-table="public.opciones_sistema"
+	 dst-table="public.permisos"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<relationship name="usuario_has_many_salida_inventario" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="1"
+	 src-table="public.usuario"
+	 dst-table="public.salida_inventario"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT">
+	<label ref-type="src-label">
+		<position x="0" y="0"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="producto_has_many_salida_inventario_detalle" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="2"
+	 src-table="public.producto"
+	 dst-table="public.salida_inventario_detalle"
+	 src-required="true" dst-required="false"
+	upd-action="RESTRICT"
+	del-action="RESTRICT"/>
+
+<table name="login">
+	<schema name="public"/>
+	<comment><![CDATA[Almacena las entradas y salidas de los usaurios al sistema]]></comment>
+	<position x="491" y="1642"/>
+	<column name="id">
+		<type name="serial"/>
+		<comment><![CDATA[PK]]></comment>
+	</column>
+	<column name="fecha" default-value="now()">
+		<type name="timestamp"/>
+		<comment><![CDATA[Fecha de movimiento]]></comment>
+	</column>
+	<column name="tipo" not-null="true">
+		<type name="varchar" length="3"/>
+		<comment><![CDATA[Define si es una entrada o si es una salida del usaurio(IN/OUT)]]></comment>
+	</column>
+	<constraint name="pk_login" type="pk-constr" factor="10" table="public.login">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="usuario_has_many_login" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="1"
+	 src-table="public.usuario"
+	 dst-table="public.login"
+	 src-required="true" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE"/>
+
+</dbmodel>
